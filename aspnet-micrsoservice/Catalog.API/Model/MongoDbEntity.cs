@@ -9,7 +9,7 @@ namespace Catalog.API.Model
         [BsonRepresentation(BsonType.ObjectId)]
         [BsonId]
         [BsonElement(Order = 0)]
-        public string Id { get; } = ObjectId.GenerateNewId().ToString();
+        public string Id { get; set; }
 
         [BsonRepresentation(BsonType.DateTime)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]

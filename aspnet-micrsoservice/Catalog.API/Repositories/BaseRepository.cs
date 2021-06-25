@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Catalog.API.Data;
 using Catalog.API.Model;
 using Microsoft.Extensions.Options;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Catalog.API.Repositories
@@ -32,10 +33,11 @@ namespace Catalog.API.Repositories
             _settings = settings.Value;
             var client = new MongoClient(_settings.ConnectionString);
             var database = client.GetDatabase(_settings.DatabaseName);
-            Collection = database.GetCollection<T>(nameof(T).ToLowerInvariant());
+            Collection = database.GetCollection<T>(typeof(T).Name.ToLowerInvariant());
         }
         public async Task<T> AddAsync(T entity)
         {
+            entity.Id = ObjectId.GenerateNewId().ToString();
             await Collection.InsertOneAsync(entity, new InsertOneOptions() { BypassDocumentValidation = false });
             return entity;
         }
